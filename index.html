@@ -1,40 +1,54 @@
-
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-
-    <title>pro-v0</title>
-    <style type="text/css" media="screen">
-	div.combobox	{font-family: Tahoma;font-size: 12px}
-	div.combobox	{position: relative;zoom: 1}
-	div.combobox	div.dropdownlist	{display: none;width: 200px;
-		border: solid 1px #000;background-color: #fff;
-		height: 200px;overflow: auto;position: absolute;
-		top: 18px;left: 0px;}
-	div.combobox	.dropdownlist	a	{display: block;text-decoration: none;
-		color: #000;padding: 1px;height: 1em;cursor: default}
-	div.combobox	.dropdownlist	a.light	{color: #fff;
-		background-color: #007}
-	div.combobox	.dropdownlist, input {font-family: Tahoma;font-size: 12px;}
-	div.combobox	input {float: left;width: 182px;
-		border: solid 1px #ccc;height: 15px}
-	div.combobox	span	{border: solid 1px #ccc;background: #eee;
-		width: 16px;height: 17px;
-		float: left;text-align: center;border-left: none;cursor: default}
-</style>
-  </head>
-
-  <body>
-    <div class="combobox">
-	<input type="text" name="comboboxfieldname" id="cb_identifier" onClick="getSelect('cb_identifier');" />
-
-	<span>V</span>
-	<div class="dropdownlist">
-
-	</div>
-</div>
-<script type="text/javascript" charset="utf-8" src="combobox.js"></script>
-  </body>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>New Web Project</title>
+        <style>
+        	#suggest {
+            position: absolute;
+            background-color: #FFFFFF;
+            border: 1px solid #CCCCFF;
+            font-size: 90%;
+            width: 200px;
+            }
+            #suggest div {
+            display: block;
+            width: 200px;
+            overflow: hidden;
+            white-space: nowrap;
+            }
+            #suggest div.select{ /* keydown, keyup */
+            color: #FFFFFF;
+            background-color: #3366FF;
+            }
+            #suggest div.over{ /* mouse over */
+            background-color: #99CCFF;
+            } 
+       	</style>
+        <script type="text/javascript" src="suggest.js"></script>
+        <script type="text/javascript" src="data.js"></script>
+    </head>
+    <body>
+        <form onsubmit="return false;">
+        <table>
+        <tr>
+        <td>Input:</td>
+        <td>
+        <!-- Input form -->
+        <input id="text" type="text" name="pattern" value="" autocomplete="off" size="10" style="display: block">
+        <!-- suggestion area -->
+        <div id="suggest" style="display:none;"> </div>
+        </td>
+        </tr>
+        </table>
+        </form>
+        <script type="text/javascript">
+            var start = function(){new Suggest.Local("text", "suggest", list, {dispMax: 10, highlight: true});};
+            window.addEventListener ?
+            window.addEventListener('load', start, false) :
+            window.attachEvent('onload', start);
+                    	
+        </script>
+    </body>
 </html>
-
