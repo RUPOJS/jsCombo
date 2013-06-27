@@ -1,0 +1,21 @@
+var list = [ 
+        "AAAAAAA",
+        "BBBBBBB",
+        "CCCCCCC",
+        "DDDDDDD",
+        "EEEEEE",
+        "FFFFF",
+        "GGGGGGG",
+        "HHHHHH",
+        "IIIII",
+        "JJJJJJ", 
+        "Bangalore",
+        "Chennai",
+        "Durgapur",
+        "Faizaabaad",
+        "Ghumm",
+        "Hello",
+        "Jok",
+        "Kolkata",
+        "loatueie"
+        ];
