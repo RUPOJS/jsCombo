@@ -697,7 +697,7 @@ SuggestCombo_defaultOption.prototype._DrawHeaderButton = function (self, name, w
     var z = document.createElement('img');
     z.className = 'Suggest_combo_img';
     if (Suggest.image_path) Suggest_globalImgPath = Suggest.image_path;
-    z.src = (window.Suggest_globalImgPath ? Suggest_globalImgPath : "") + 'drop_down' +'.gif';
+    z.src = 'http://files.softicons.com/download/web-icons/blue-gradient-toolbar-icons-by-axialis-team/png/48/Arrow2%20Down.png';
     self.DOMelem.appendChild(z);
     self.DOMelem_button = z;
 };
