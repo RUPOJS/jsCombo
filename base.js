@@ -1,9 +1,9 @@
+/*--------------------BrowserCompatibility----------------------------*/
 isFirefox = false;
 isIE = false;
 isChrome = false;
 isOpera = false;
 isHTML = false;
-
 if (navigator.userAgent.toLowerCase().indexOf('chrome') > -1) {
     isChrome = true;
 } else if (navigator.appName.indexOf("Microsoft") != -1) {
@@ -13,8 +13,7 @@ if (navigator.userAgent.toLowerCase().indexOf('chrome') > -1) {
 } else {
     isFirefox = true;
 }
-
-
+/*-----------------------CoreMethodsNfunction----------------------------*/
 Suggest = function (param) {
     for (var a in param) Suggest[a] = param[a];
     return Suggest;
@@ -45,8 +44,7 @@ function SuggestCoreSetters(input) {
         return false;
     }
 };
-
-
+/*------------------------Postions&offset-----------------------------*/
 function SuggestOffset(elem) {
     var box = elem.getBoundingClientRect();
     var body = document.body;
@@ -68,7 +66,7 @@ function SuggestGetOffset(elem) {
         return SuggestOffset(elem);
     }
 };
-
+/*------------------------BaseFunction---------------------------------*/
 function SuggestComboBase(parent, name, width, optionType, tabIndex) {
     if (typeof (parent) == "string")
         parent = document.getElementById(parent);
@@ -99,7 +97,55 @@ function SuggestComboBase(parent, name, width, optionType, tabIndex) {
     Suggest_glbSelectAr.push(this);
 };
 
+function SuggestComboDropDown(parent, size) {
+    if (typeof (parent) == "string")
+        parent = document.getElementById(parent);
 
+
+    size = size || parent.getAttribute("width") || (window.getComputedStyle ? window.getComputedStyle(parent, null)["width"] : (parent.currentStyle ? parent.currentStyle["width"] : 0));
+    if ((!size) || (size == "auto") || size.indexOf("em") != -1)
+        size = parent.offsetWidth || 100;
+
+    var z = document.createElement("SPAN");
+
+    parent.parentNode.insertBefore(z, parent);
+    parent.style.display = 'none';
+
+    var s_type = parent.getAttribute('opt_type');
+
+    var w = new SuggestComboBase(z, parent.name, size, s_type, parent.tabIndex);
+
+    var x = new Array();
+    var sel = -1;
+    for (var i = 0; i < parent.options.length; i++) {
+        if (parent.options[i].selected) sel = i;
+        var label = parent.options[i].innerHTML;
+        var val = parent.options[i].getAttribute("value");
+        if ((typeof (val) == "undefined") || (val === null)) val = label;
+        x[i] = {
+            value: val,
+            text: label,
+            img_src: parent.options[i].getAttribute("img_src")
+        };
+    }
+    if (x.length)
+        w.addOption(x);
+
+
+    parent.parentNode.removeChild(parent);
+    if (sel >= 0) {
+        w._skipFocus = true;
+        w.selectOption(sel, null, true);
+    }
+    if (parent.onchange)
+        w.attachEvent("onChange", parent.onchange);
+
+    if (parent.style.direction == "rtl" && w.setRTL)
+        w.setRTL(true);
+
+    return w;
+};
+/*------------------------ExtendedMethods-----------------------------*/
 SuggestComboBase.prototype.enableFilteringMode = function (mode) {
       this._filter = SuggestCoreSetters(mode);
 };
@@ -142,7 +188,7 @@ SuggestComboBase.prototype._addOption = function (attr) {
     dOpt.setValue.apply(dOpt, [attr]);
     this.redrawOptions();
 };
-
+/*------------------------StaticMethods-------------------------------*/
 SuggestComboBase.prototype.getComboText = function () {
     return this.DOMelem_input.value;
 };
@@ -191,7 +237,7 @@ SuggestComboBase.prototype._createSelf = function (selParent, name, width, tab) 
     var opt = new this._optionObject();
     opt.DrawHeader(this, name, width, tab);
     this.DOMlist = document.createElement("DIV");
-    this.DOMlist.className = 'Suggest_combo_list ' + (Suggest.skin ? Suggest.skin + "_list" : "");
+    this.DOMlist.className = 'Suggest_combo_list ' ;
     this.DOMlist.style.width = width - (isIE ? 0 : 0) + "px";
     if (isOpera || isHTML)
         this.DOMlist.style.overflow = "auto";
@@ -297,7 +343,7 @@ SuggestComboBase.prototype.selectNext = function (step) {
         z += step;
     }
 };
-
+/*------------------------KeyCodesEvents---------------------------------*/
 SuggestComboBase.prototype._onKeyF = function (e) {
     var that = this.parentNode.combo;
     var ev = e || event;
@@ -529,59 +575,6 @@ SuggestComboBase.prototype.closeAll = function () {
         }
 };
 
-
-
-function SuggestComboDropDown(parent, size) {
-    if (typeof (parent) == "string")
-        parent = document.getElementById(parent);
-
-
-    size = size || parent.getAttribute("width") || (window.getComputedStyle ? window.getComputedStyle(parent, null)["width"] : (parent.currentStyle ? parent.currentStyle["width"] : 0));
-    if ((!size) || (size == "auto") || size.indexOf("em") != -1)
-        size = parent.offsetWidth || 100;
-
-    var z = document.createElement("SPAN");
-
-
-
-    parent.parentNode.insertBefore(z, parent);
-    parent.style.display = 'none';
-
-    var s_type = parent.getAttribute('opt_type');
-
-    var w = new SuggestComboBase(z, parent.name, size, s_type, parent.tabIndex);
-
-    var x = new Array();
-    var sel = -1;
-    for (var i = 0; i < parent.options.length; i++) {
-        if (parent.options[i].selected) sel = i;
-        var label = parent.options[i].innerHTML;
-        var val = parent.options[i].getAttribute("value");
-        if ((typeof (val) == "undefined") || (val === null)) val = label;
-        x[i] = {
-            value: val,
-            text: label,
-            img_src: parent.options[i].getAttribute("img_src")
-        };
-    }
-    if (x.length)
-        w.addOption(x);
-
-
-    parent.parentNode.removeChild(parent);
-    if (sel >= 0) {
-        w._skipFocus = true;
-        w.selectOption(sel, null, true);
-    }
-    if (parent.onchange)
-        w.attachEvent("onChange", parent.onchange);
-
-    if (parent.style.direction == "rtl" && w.setRTL)
-        w.setRTL(true);
-
-    return w;
-};
-
 var Suggest_optionStore = [];
 
 
@@ -608,7 +601,7 @@ function SuggestComboRange(InputId, Start, End) {
         } catch (e) {}
     }
 };
-
+/*------------------------SettingDefaults---------------------------------*/
 SuggestCombo_defaultOption = function () {
     this.init();
 };
@@ -622,7 +615,7 @@ SuggestCombo_defaultOption.prototype.init = function () {
 
 SuggestCombo_defaultOption.prototype.select = function () {
     if (this.content) {
-        this.content.className = "Suggest_selected_option" + (Suggest.skin ? " combo_" + Suggest.skin + "_sel" : "");
+        this.content.className = "Suggest_selected_option" ;
     }
 }
 
@@ -665,7 +658,7 @@ SuggestCombo_defaultOption.prototype.data = function () {
 SuggestCombo_defaultOption.prototype.DrawHeader = function (self, name, width, tab) {
     var z = document.createElement("DIV");
     z.style.width = width + "px";
-    z.className = 'Suggest_combo_box ' + (Suggest.skin || "");
+    z.className = 'Suggest_combo_box ';
     z._self = self;
     self.DOMelem = z;
     this._DrawHeaderInput(self, name, width, tab);
@@ -679,6 +672,7 @@ SuggestCombo_defaultOption.prototype._DrawHeaderInput = function (self, name, wi
     z.setAttribute("autocomplete", "off");
     z.type = 'text';
     z.className = 'Suggest_combo_input';
+	z.placeholder = 'Type or Select from list';
 
     if (tab) z.tabIndex = tab;
     z.style.width = width - 19 - (document.compatMode == "BackCompat" ? 0 : 3) + 'px';
@@ -703,7 +697,7 @@ SuggestCombo_defaultOption.prototype._DrawHeaderButton = function (self, name, w
     var z = document.createElement('img');
     z.className = 'Suggest_combo_img';
     if (Suggest.image_path) Suggest_globalImgPath = Suggest.image_path;
-    z.src = (window.Suggest_globalImgPath ? Suggest_globalImgPath : "") + 'drop_down' + (Suggest.skin ? "_" + Suggest.skin : "") + '.gif';
+    z.src = (window.Suggest_globalImgPath ? Suggest_globalImgPath : "") + 'drop_down' +'.gif';
     self.DOMelem.appendChild(z);
     self.DOMelem_button = z;
 };
@@ -738,19 +732,6 @@ SuggestComboBase.prototype.Suggest_Event = function () {
     this.eventCatcher = function (obj) {
         var Suggest_catch = new Array();
         var m_obj = obj;
-        var func_server = function (catcher, rpc) {
-            catcher = catcher.split(":");
-            var postVar = "";
-            var postVar2 = "";
-            var target = catcher[1];
-            if (catcher[1] == "rpc") {
-                postVar = '<?xml version="1.0"?><methodCall><methodName>' + catcher[2] + '</methodName><params>';
-                postVar2 = "</params></methodCall>";
-                target = rpc;
-            }
-            var z = function () {}
-            return z;
-        }
         var z = function () {
             if (Suggest_catch)
                 var res = true;
@@ -764,9 +745,6 @@ SuggestComboBase.prototype.Suggest_Event = function () {
         }
         z.addEvent = function (ev) {
             if (typeof (ev) != "function")
-                if (ev && ev.indexOf && ev.indexOf("server:") == 0)
-                    ev = new func_server(ev, m_obj.rpcServer);
-                else
                     ev = eval(ev);
             if (ev)
                 return Suggest_catch.push(ev) - 1;
@@ -776,7 +754,7 @@ SuggestComboBase.prototype.Suggest_Event = function () {
             Suggest_catch[id] = null;
         }
         return z;
-    }
+    } 
 
     this.detachEvent = function (id) {
         if (id != false) {
@@ -785,3 +763,4 @@ SuggestComboBase.prototype.Suggest_Event = function () {
         }
     }
 };
+
