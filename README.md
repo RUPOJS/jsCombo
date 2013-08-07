@@ -1,1 +1,1 @@
-An example of combox in pure javascript.
+An example of combobox in pure javascript.
